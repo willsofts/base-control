@@ -3,6 +3,7 @@ import "jquery-ui-dist/jquery-ui.css";
 import "./assets/jquery/js/jquery.maskedinput.js";
 import "./assets/clockpicker/bootstrap-clockpicker.js";
 import "./assets/clockpicker/bootstrap-clockpicker.css";
+import "./assets/css/component_style.css";
 
 import DataPaging from "./controls/DataPaging.vue";
 import DataTable from "./controls/DataTable.vue";
