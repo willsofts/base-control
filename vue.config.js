@@ -7,16 +7,13 @@ module.exports = defineConfig({
     extract: false
   },
   configureWebpack: {
-    output: {
-      libraryExport: 'default'
-    },    
     devtool: "source-map",
     optimization: {
       minimize: false
     },
     resolve: {
       alias: {
-        // bind to modules;
+        "jquery-ui": "jquery-ui-dist/jquery-ui.js",
         modules: path.join(__dirname, "node_modules")
       }
     },
