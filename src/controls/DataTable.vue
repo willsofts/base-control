@@ -59,7 +59,7 @@
 </template>
 <script>
 import { ref } from 'vue';
-import { Paging } from "../assets/js/Paging.js";
+import { Paging, DEFAULT_PAGE_SETTINGS } from "../assets/js/Paging.js";
 import { ensureTableSetting, formatDataTable } from "../assets/js/ctrl.util.js";
 
 export default {
