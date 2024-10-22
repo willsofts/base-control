@@ -26,7 +26,7 @@
           </template>
           <template v-for="(column,colIndex) in headers.columns" :key="colIndex">
             <td :class="column.css">
-                <a href="javascript:void(0)" class="alink-data fa-data-edit" @click="dataSelect(item)"><span v-if="column.unescape" v-html="formatData(item[column.name],column)"></span><span v-else>{{ formatData(item[column.name],column) }}</span></a>
+                <a href="javascript:void(0)" class="alink-data fa-data-edit" @click="dataSelect(item)"><span v-if="column.unescape" v-html="formatData(item[column.name],column,item)"></span><span v-else>{{ formatData(item[column.name],column,item) }}</span></a>
             </td>
           </template>
           <template v-if="hasActions">
@@ -125,15 +125,15 @@ export default {
       this.sorting[sorter] = direction;
       this.$emit('data-sort', sorter, direction);
     },
-    formatData(data,field) {
+    formatData(data,field,record) {
       if(this.$props.formater) {
-        let result = this.$props.formater.call(this,data,field);
+        let result = this.$props.formater.call(this,data,field,record);
         if(result) return result;
       }
-      return this.formatField(data,field);
+      return this.formatField(data,field,record);
     },
-    formatField(data,field) {
-      return formatDataTable(data,field);
+    formatField(data,field,record) {
+      return formatDataTable(data,field,record);
     },
   }
 };
