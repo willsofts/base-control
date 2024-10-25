@@ -1,50 +1,55 @@
 <template>
-<table class="data-table table table-bordered table-hover table-striped tablesorter">
-	<thead class="data-table-header">
-		<tr>
+<table :class="headers.tableCSS">
+	<thead :class="headers.headCSS">
+		<tr :class="headers.headRowCSS">
       <template v-if="hasSequence">
-			<th class="text-center th-sequence"><label>{{ labels[headers.sequence.label] }}</label></th>
+			  <th :class="headers.headSeqCSS"><label>{{ labels[headers.sequence.label] }}</label></th>
       </template>
       <template v-for="(item,index) in headers.columns" :key="index">
         <template v-if="item.sorter">
-          <th class="text-center th-data"><A href="javascript:void(0)" class="alink-sorter fa-data-sort" @click="dataSort(item)"><label v-html="labels[item.label]"></label></A></th>
+          <th :class="headers.headColCSS"><A href="javascript:void(0)" class="alink-sorter fa-data-sort" @click="dataSort(item)"><label v-html="labels[item.label]"></label></A></th>
         </template>
         <template v-else>
-          <th class="text-center th-data"><label v-html="labels[item.label]"></label></th>
+          <th :class="headers.headColCSS"><label v-html="labels[item.label]"></label></th>
         </template>
       </template>
       <template v-if="hasActions">
-			<th class="text-center th-action"><em class="fa fa-bolt" aria-hidden="true"></em></th>
+			  <th :class="headers.headActionCSS"><em class="fa fa-bolt" aria-hidden="true"></em></th>
       </template>
 		</tr>
 	</thead>
-	<tbody class="data-table-body">
+	<tbody :class="headers.bodyCSS">
     <template v-if="hasDataSet">
-        <tr v-for="(item,index) in datas?.rows" :key="index">
+        <tr v-for="(item,index) in datas?.rows" :key="index" :class="headers.rowCSS">
           <template v-if="hasSequence">
             <td class="text-center"><label>{{ page.recordsNumber(index+1) }}</label></td>
           </template>
           <template v-for="(column,colIndex) in headers.columns" :key="colIndex">
             <td :class="column.css">
-                <a href="javascript:void(0)" class="alink-data fa-data-edit" @click="dataSelect(item)"><span v-if="column.unescape" v-html="formatData(item[column.name],column,item)"></span><span v-else>{{ formatData(item[column.name],column,item) }}</span></a>
+              <template v-if="headers.defaultAction">
+                <a href="javascript:void(0)" class="alink-data fa-data-edit" @click="dataSelect(item,headers.defaultAction)"><span v-if="column.unescape" v-html="formatData(item[column.name],column,item)"></span><span v-else>{{ formatData(item[column.name],column,item) }}</span></a>
+              </template>
+              <template v-else>
+                <span v-if="column.unescape" v-html="formatData(item[column.name],column,item)"></span><span v-else>{{ formatData(item[column.name],column,item) }}</span>
+              </template>
             </td>
           </template>
           <template v-if="hasActions">
             <td class="text-center">
               <template v-for="(action,actionIndex) in headers.actions" :key="actionIndex">
                 <template v-if="action.render">
-                  <template v-if="(actioner = action.render(item))">
-                    <template v-if="actioner.type=='button'">
-                      <button :class="actioner.css" @click="dataSelect(item,actioner.action)">
-                        <template v-if="actioner.icon"><em :class="actioner.icon"></em></template>
-                      </button>
+                    <template v-if="(actioner = action.render(item))">
+                      <template v-if="actioner.type=='button'">
+                        <button :class="actioner.css" @click="dataSelect(item,action.render(item).action)">
+                          <template v-if="actioner.icon"><em :class="actioner.icon"></em></template>
+                        </button>
+                      </template>
+                      <template v-if="actioner.type=='a'">
+                        <A href="javascript:void(0)" class="alink-action" :class="actioner.css" @click="dataSelect(item,action.render(item).action)">
+                          <template v-if="actioner.icon"><em :class="actioner.icon"></em></template>
+                        </A>
+                      </template>
                     </template>
-                    <template v-if="actioner.type=='a'">
-                      <A href="javascript:void(0)" class="alink-action" :class="actioner.css" @click="dataSelect(item,actioner.action)">
-                        <template v-if="actioner.icon"><em :class="actioner.icon"></em></template>
-                      </A>
-                    </template>
-                  </template>
                 </template>
                 <template v-else>
                   <template v-if="action.type=='button'">
@@ -126,7 +131,7 @@ export default {
         this.page.reset(newData?.offsets);
       }
     },
-    dataSelect(item,action='edit') {
+    dataSelect(item,action) {
       this.$emit('data-select', item,action);
     },
     getDirection(orderDir) {

@@ -249,7 +249,10 @@ export function formatDecimal(avalue,decimal,verifydecimal) {
 
 const header_action = { type: "button", action: "edit" };
 export function ensureTableSetting(settings) {
-    let headers = {autoFormat: true, ...settings};
+    let headers = { autoFormat: true, defaultAction: "edit", 
+		tableCSS:"data-table table table-bordered table-hover table-striped tablesorter", bodyCSS: "data-table-body", rowCSS: "", 
+		headCSS: "data-table-header", headRowCSS: "", headColCSS: "text-center th-data", headSeqCSS: "text-center th-sequence", headActionCSS: "text-center th-action",
+		...settings };
     if(headers.actions) {
         for(let act of headers.actions) {
             let item = {...header_action, ...act};

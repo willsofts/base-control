@@ -3,9 +3,9 @@
 <table class="fschaptertable">
 	<tr class="fschapterrow"><td class="fschaptercolumn">
 	<div class="fschapterlayer">
-    <ul class="page-table-class pagination pagination-sm" >
-        <li v-for="(item,index) in pager" :key="index" class="page-item page-column-class" :class="item.css">
-            <A HREF="javascript:void(0)" @click="pageSelect(item)" class="page-link pagenoclass fa-data-page" :class="item.css" :data-paging="item.page">{{ item.text }}</A>
+    <ul :class="pageCSS.ulCSS" >
+        <li v-for="(item,index) in pager" :key="index" :class="[pageCSS.liCSS, item.css]">
+            <A HREF="javascript:void(0)" @click="pageSelect(item)" :class="[pageCSS.aCSS, item.css]" :data-paging="item.page">{{ item.text }}</A>
         </li>
     </ul>
     </div>
@@ -18,16 +18,24 @@
 import { ref } from 'vue';
 import { Paging, DEFAULT_PAGE_SETTINGS } from "../assets/js/Paging.js";
 
+const defaultCSS = {
+  ulCSS: "page-table-class pagination pagination-sm",
+  liCSS: "page-item page-column-class",
+  aCSS: "page-link pagenoclass fa-data-page"
+};
+
 export default {
   props: {
-    settings: Object
+    settings: Object,
+    css: Object,
   },
   emits: ["page-select"],
   setup(props) {
     let paging = new Paging(props.settings);
     let model = paging.buildPagingModel();
     let pager = ref(model);
-    return { paging, pager };
+    let pageCSS = {...defaultCSS, ...props.css};
+    return { paging, pager, pageCSS };
   },
   methods: {
     clear() {
