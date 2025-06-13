@@ -1,5 +1,5 @@
 <template>
-<div class="header-layer">
+<div class="header-layer" v-show="visible">
     <nav class="program-controlbar navbar navbar-expand-sm navbar-top navbar-header-title">
         <h1 class="page-header-title"><div class="navbar-header"><label>{{ labels.caption_title }}</label></div></h1>
         <ul class="navbar-nav navbar-right ml-auto program-control-layer">
@@ -30,6 +30,10 @@ export default {
   props: {
     pid: String,
     labels: Object,
+    visible: {
+      type: [String,Boolean],
+      default: true,
+    },    
     version: {
       type: String,
       default: "1.0.0",
